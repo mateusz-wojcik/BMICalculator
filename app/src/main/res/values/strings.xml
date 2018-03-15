@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_title">BMI Calculator</string>
+    <string name="app_name">BMICalculator</string>
+    <string name="your_bmi">Your BMI</string>
+    <string name="mass">Mass\u0020</string>
+    <string name="height">Height\u0020</string>
+    <string name="bmi">BMI:</string>
+    <string name="calculate">Calculate</string>
+    <string name="author">Author</string>
+    <string name="about">Mateusz Wojcik</string>
+    <string name="about_me">About me</string>
+    <string name="info_about_me">Studiuje sobie na izecie. Za miesiac koncze 21 lat i ogolnie
+    to nie mam pomyslu co wiecej moge tutaj napisac, co by kogokolwiek zaciekawilo,
+    ale musze napisac kilka linijek tekstu wiec pisze, zeby przynajmniej ze 4 byly</string>
+    <string name="switch_text_si">SI</string>
+    <string name="switch_text_imperial">Imperial</string>
+    <string name="kilograms">[kg]</string>
+    <string name="pounds">[lb]</string>
+    <string name="centymeters">[cm]</string>
+    <string name="inches">[in]</string>
+    <string name="error">Error</string>
+    <string name="error_message">Chciales zepsuc, nieladnie. Wprowadz dane jak trzeba</string>
+    <string name="spoko">Spoko</string>
+
+    <string name="title_activity_author">AuthorActivity</string>
+
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+</resources>
