@@ -2,6 +2,7 @@ package com.example.rudy.bmicalculator;
 
 import android.graphics.Color;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -36,20 +37,24 @@ public class DisplayBMIActivity extends AppCompatActivity {
         switch (status){
             case UNDERWEIGHT:
                 layout.setBackgroundColor(Color.GREEN);
-                player = MediaPlayer.create(DisplayBMIActivity.this, R.raw.correctsound);
-                player.start();
+                playSound(R.raw.correctsound);
                 break;
             case NORMAL:
                 layout.setBackgroundColor(Color.BLUE);
-                player = MediaPlayer.create(DisplayBMIActivity.this, R.raw.correctsound);
-                player.start();
+                playSound(R.raw.correctsound);
                 break;
             case OVERWEIGHT:
                 layout.setBackgroundColor(Color.RED);
-                player = MediaPlayer.create(DisplayBMIActivity.this, R.raw.overweightsound);
-                player.start();
+                playSound(R.raw.overweightsound);
                 break;
         }
+
+    }
+
+    //zacne efekty dzwiekowe
+    public void playSound(int soundId){
+        player = MediaPlayer.create(DisplayBMIActivity.this, soundId);
+        player.start();
 
     }
 
@@ -79,4 +84,5 @@ public class DisplayBMIActivity extends AppCompatActivity {
         if(player.isPlaying()) player.stop();
         super.onStop();
     }
+
 }

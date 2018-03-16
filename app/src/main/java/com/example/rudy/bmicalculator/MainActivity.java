@@ -3,26 +3,18 @@ package com.example.rudy.bmicalculator;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 public class MainActivity extends AppCompatActivity {
-    
-    //lapis lazuli -> grynszpan
+
+    private static final Double BMI_ERROR = -1.0;
     private EditText heightEditText, massEditText;
     private TextView massTextView, heightTextView;
     private Switch unitSwitch;
@@ -55,32 +47,15 @@ public class MainActivity extends AppCompatActivity {
     public void calculateBMIButtonOnClick(android.view.View v){
         Double bmi = calculateBMI();
 
-        if(bmi == -1.0) {
-            showIllegalArgumentAlert();
-        }
-        else {
-            Intent intent = new Intent(v.getContext(), DisplayBMIActivity.class);
-            intent.putExtra("bmiValue", bmi);
-            startActivity(intent);
-        }
+        if(bmi == BMI_ERROR) { showIllegalArgumentAlert();}
+        else { startDisplayBmiActivity(v, bmi);}
     }
 
-    public Double calculateBMI(){
-        Double bmi = 0.0;
-        try {
-            if(unitSwitch.isChecked()) {
-                BmiForLbIn bmiClass = new BmiForLbIn(Double.parseDouble(massEditText.getText().toString()), Double.parseDouble(heightEditText.getText().toString()));
-                bmi = bmiClass.calculateBmi();
-            }
-            else {
-                BmiForKgM bmiClass = new BmiForKgM(Double.parseDouble(massEditText.getText().toString()), Double.parseDouble(heightEditText.getText().toString()));
-                bmi = bmiClass.calculateBmi();
-            }
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            return -1.0;
-        }
-        return bmi;
+    public void startDisplayBmiActivity(android.view.View v, Double calculatedBmi){
+        Intent intent = new Intent(v.getContext(), DisplayBMIActivity.class);
+        intent.putExtra("bmiValue", calculatedBmi);
+        startActivity(intent);
+
     }
 
     public void showIllegalArgumentAlert(){
@@ -104,10 +79,7 @@ public class MainActivity extends AppCompatActivity {
         setUnitsFromSwitch();
     }
 
-    public void saveOnClick(MenuItem item) {
-       saveDataSharedPreferences();
-
-    }
+    public void saveOnClick(MenuItem item) { saveDataSharedPreferences();}
 
     public void saveDataSharedPreferences(){
         SharedPreferences settings = getApplicationContext().getSharedPreferences("MyPreferences", 0);
@@ -147,33 +119,22 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void readData() throws IOException {
-        File path = getApplicationContext().getFilesDir();
-        File file = new File(path, "save_bmi_file.txt");
-
-        FileInputStream in = new FileInputStream(file);
-        InputStreamReader isr = new InputStreamReader(in);
-        BufferedReader br = new BufferedReader(isr);
-        String line = null;
-        if((line = br.readLine()) != null) massEditText.setText(line);
-        if((line = br.readLine()) != null) heightEditText.setText(line);
-
-        in.close();
-        isr.close();
-        br.close();
-    }
-
-    public void saveData() throws IOException {
-        File path = getApplicationContext().getFilesDir();
-        File file = new File(path, "save_bmi_file.txt");
-        FileOutputStream stream = new FileOutputStream(file);
+    public Double calculateBMI(){
+        Double bmi;
         try {
-            stream.write((massEditText.getText().toString() + System.getProperty("line.separator")).getBytes());
-            stream.write(heightEditText.getText().toString().getBytes());
-        } catch (IOException e){}
-        finally {
-            stream.close();
+            if(unitSwitch.isChecked()) {
+                BmiForLbIn bmiClass = new BmiForLbIn(Double.parseDouble(massEditText.getText().toString()), Double.parseDouble(heightEditText.getText().toString()));
+                bmi = bmiClass.calculateBmi();
+            }
+            else {
+                BmiForKgM bmiClass = new BmiForKgM(Double.parseDouble(massEditText.getText().toString()), Double.parseDouble(heightEditText.getText().toString()));
+                bmi = bmiClass.calculateBmi();
+            }
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            return BMI_ERROR;
         }
-
+        return bmi;
     }
+
 }

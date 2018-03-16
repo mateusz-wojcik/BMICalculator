@@ -163,4 +163,7 @@ public class AuthorActivity extends AppCompatActivity {
         super.onConfigurationChanged(newConfig);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
+
+    //link to used image
+    //https://d1marr3m5x4iac.cloudfront.net/images/original/I0-001/013/730/509-5.jpeg_/lindsey-stirling-09.jpeg
 }
