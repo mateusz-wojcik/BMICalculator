@@ -9,9 +9,9 @@
     <string name="author">Author</string>
     <string name="about">Mateusz Wojcik</string>
     <string name="about_me">About me</string>
-    <string name="info_about_me">Studiuje sobie na izecie. Za miesiac koncze 21 lat, lubie dobra muzyke i ogolnie
+    <string name="info_about_me">Studiuje sobie na izecie. Za miesiac koncze 21 lat, ogolnie
     to nie mam pomyslu co wiecej moge tutaj napisac, co by kogokolwiek zaciekawilo,
-    ale musze napisac kilka linijek tekstu, zeby sie dobrze komponowalo. Ale za to wklejam ladny obrazek :)</string>
+    ale musze napisac kilka linijek tekstu, zeby sie dobrze komponowalo.</string>
     <string name="switch_text_si">SI</string>
     <string name="switch_text_imperial">Imperial</string>
     <string name="kilograms">[kg]</string>
@@ -21,6 +21,9 @@
     <string name="error">Error</string>
     <string name="error_message">Chciales zepsuc, nieladnie. Wprowadz dane jak trzeba</string>
     <string name="spoko">Spoko</string>
+    <string name="underweight">UNDERWEIGHT</string>
+    <string name="normalweight">CORRECT</string>
+    <string name="overweight">OVERWEIGHT</string>
 
     <string name="title_activity_author">AuthorActivity</string>
 

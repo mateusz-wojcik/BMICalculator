@@ -5,6 +5,10 @@ package com.example.rudy.bmicalculator;
  */
 
 public abstract class Bmi {
+
+    public static final double MAX_BMI_UNDERWEIGHT = 18.5;
+    public static final double MAX_BMI_NORMALWEIGHT = 25.0;
+
     protected Double mass, height;
     public Bmi(Double mass, Double height){
         this.mass = mass;

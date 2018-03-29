@@ -45,17 +45,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void calculateBMIButtonOnClick(android.view.View v){
-        Double bmi = calculateBMI();
+        Double bmi = null;
+        bmi = calculateBMI();
 
         if(bmi == BMI_ERROR) { showIllegalArgumentAlert();}
         else { startDisplayBmiActivity(v, bmi);}
-    }
-
-    public void startDisplayBmiActivity(android.view.View v, Double calculatedBmi){
-        Intent intent = new Intent(v.getContext(), DisplayBMIActivity.class);
-        intent.putExtra("bmiValue", calculatedBmi);
-        startActivity(intent);
-
     }
 
     public void showIllegalArgumentAlert(){
@@ -106,34 +100,45 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void setUnitsFromSwitch(){
-        if(unitSwitch.isChecked()){
-            massTextView.setText(String.format("%s%s", getString(R.string.mass), getString(R.string.pounds)));
-            heightTextView.setText(String.format("%s%s", getString(R.string.height), getString(R.string.inches)));
-            unitSwitch.setText(R.string.switch_text_imperial);
-        }
-        else {
-            massTextView.setText(String.format("%s%s", getString(R.string.mass), getString(R.string.kilograms)));
-            heightTextView.setText(String.format("%s%s", getString(R.string.height), getString(R.string.centymeters)));
-            unitSwitch.setText(R.string.switch_text_si);
-        }
+    public void startDisplayBmiActivity(android.view.View v, Double calculatedBmi){
+        Intent intent = new Intent(v.getContext(), DisplayBMIActivity.class);
+        intent.putExtra("bmiValue", calculatedBmi);
+        startActivity(intent);
     }
 
-    public Double calculateBMI(){
+    public void setUnitsFromSwitch(){
+        if(unitSwitch.isChecked())
+            setImprerialUnits();
+        else
+            setSiUnits();
+    }
+
+    public void setImprerialUnits(){
+        massTextView.setText(String.format("%s%s", getString(R.string.mass), getString(R.string.pounds)));
+        heightTextView.setText(String.format("%s%s", getString(R.string.height), getString(R.string.inches)));
+        unitSwitch.setText(R.string.switch_text_imperial);
+    }
+
+    public void setSiUnits(){
+        massTextView.setText(String.format("%s%s", getString(R.string.mass), getString(R.string.kilograms)));
+        heightTextView.setText(String.format("%s%s", getString(R.string.height), getString(R.string.centymeters)));
+        unitSwitch.setText(R.string.switch_text_si);
+    }
+
+    public Double calculateBMI() {
         Double bmi;
+        Bmi bmiClass;
         try {
-            if(unitSwitch.isChecked()) {
-                BmiForLbIn bmiClass = new BmiForLbIn(Double.parseDouble(massEditText.getText().toString()), Double.parseDouble(heightEditText.getText().toString()));
-                bmi = bmiClass.calculateBmi();
-            }
-            else {
-                BmiForKgM bmiClass = new BmiForKgM(Double.parseDouble(massEditText.getText().toString()), Double.parseDouble(heightEditText.getText().toString()));
-                bmi = bmiClass.calculateBmi();
-            }
-        } catch (IllegalArgumentException e) {
+            bmiClass = unitSwitch.isChecked() ?
+                       new BmiForLbIn(Double.parseDouble(massEditText.getText().toString()), Double.parseDouble(heightEditText.getText().toString())) :
+                       new BmiForKgM(Double.parseDouble(massEditText.getText().toString()), Double.parseDouble(heightEditText.getText().toString()));
+
+            bmi = bmiClass.calculateBmi();
+        } catch (Exception e) {
             e.printStackTrace();
             return BMI_ERROR;
         }
+
         return bmi;
     }
 

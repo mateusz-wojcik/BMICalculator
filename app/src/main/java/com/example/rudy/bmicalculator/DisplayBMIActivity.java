@@ -1,5 +1,7 @@
 package com.example.rudy.bmicalculator;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -11,11 +13,10 @@ import android.widget.TextView;
 
 public class DisplayBMIActivity extends AppCompatActivity {
 
-    public static final double MAX_BMI_UNDERWEIGHT = 18.5;
-    public static final double MAX_BMI_NORMALWEIGHT = 25.0;
-
     private Double bmi;
+    private BMIStatus bmiStatus;
     private TextView displayBmi;
+    private TextView displayBmiStatus;
     private ConstraintLayout layout;
     private MediaPlayer player;
 
@@ -26,29 +27,24 @@ public class DisplayBMIActivity extends AppCompatActivity {
         setContentView(R.layout.activity_display_bmi);
         setReferences();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        bmi = getIntent().getDoubleExtra("bmiValue", 0);
-
-        displayBmi.setText(bmi.toString());
-        setBackgroundColor(getBmiStatus());
+        activeSetMethods();
     }
 
-    public void setBackgroundColor(BMIStatus status){
-        switch (status){
-            case UNDERWEIGHT:
-                layout.setBackgroundColor(Color.GREEN);
-                playSound(R.raw.correctsound);
-                break;
-            case NORMAL:
-                layout.setBackgroundColor(Color.BLUE);
-                playSound(R.raw.correctsound);
-                break;
-            case OVERWEIGHT:
-                layout.setBackgroundColor(Color.RED);
-                playSound(R.raw.overweightsound);
-                break;
-        }
+    public void activeSetMethods(){
+        setBmi(getIntent().getDoubleExtra("bmiValue", 0));
+        setBmiStatus(findBmiStatus());
+        setBmiStatusDisplayText(findBmiStatusDisplayText(getBmiStatus()));
+        setDisplayBmiText(bmi.toString());
+        setBackgroundColor(getBmiStatus());
+        setSound(getBmiStatus());
+    }
 
+    public void setDisplayBmiText(String text){
+        displayBmi.setText(text);
+    }
+
+    public void setBmi(Double bmi){
+        this.bmi = bmi;
     }
 
     //zacne efekty dzwiekowe
@@ -59,9 +55,21 @@ public class DisplayBMIActivity extends AppCompatActivity {
     }
 
     public BMIStatus getBmiStatus(){
+        return bmiStatus;
+    }
+
+    public void setBmiStatus(BMIStatus bmiStatus){
+        this.bmiStatus = bmiStatus;
+    }
+
+    public void setBmiStatusDisplayText(String text){
+        displayBmiStatus.setText(text);
+    }
+
+    public BMIStatus findBmiStatus(){
         BMIStatus bmiStatus;
-        if(bmi < MAX_BMI_UNDERWEIGHT) bmiStatus = BMIStatus.UNDERWEIGHT;
-        else if(bmi < MAX_BMI_NORMALWEIGHT) bmiStatus = BMIStatus.NORMAL;
+        if(bmi < Bmi.MAX_BMI_UNDERWEIGHT) bmiStatus = BMIStatus.UNDERWEIGHT;
+        else if(bmi < Bmi.MAX_BMI_NORMALWEIGHT) bmiStatus = BMIStatus.NORMAL;
         else bmiStatus = BMIStatus.OVERWEIGHT;
 
         return bmiStatus;
@@ -70,7 +78,54 @@ public class DisplayBMIActivity extends AppCompatActivity {
     public void setReferences(){
         displayBmi = findViewById(R.id.displayBmiTextView);
         layout = findViewById(R.id.activity_display_bmi_layout);
+        displayBmiStatus = findViewById(R.id.displayBmiStatusTextView);
         player = new MediaPlayer();
+    }
+
+
+    public void setBackgroundColor(BMIStatus status){
+        switch (status){
+            case UNDERWEIGHT:
+                layout.setBackgroundColor(Color.GREEN);
+                break;
+            case NORMAL:
+                layout.setBackgroundColor(Color.BLUE);
+                break;
+            case OVERWEIGHT:
+                layout.setBackgroundColor(Color.RED);
+                break;
+        }
+
+    }
+
+    public void setSound(BMIStatus status){
+        switch (status){
+            case UNDERWEIGHT:
+            case NORMAL:
+                playSound(R.raw.correctsound);
+                break;
+            case OVERWEIGHT:
+                playSound(R.raw.overweightsound);
+                break;
+        }
+
+    }
+
+    public String findBmiStatusDisplayText(BMIStatus bmiStatus){
+        String result = null;
+        switch (bmiStatus){
+            case UNDERWEIGHT:
+                result = getString(R.string.underweight);
+                break;
+            case NORMAL:
+                result = getString(R.string.normalweight);
+                break;
+            case OVERWEIGHT:
+                result = getString(R.string.overweight);
+                break;
+        }
+
+        return result;
     }
 
     @Override
